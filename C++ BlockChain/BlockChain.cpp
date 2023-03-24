@@ -8,6 +8,15 @@ struct TransactionData{
     string senderKey;
     string receiverKey;
     time_t timestamp;
+
+    TransactionData(){};
+
+    TransactionData(double amt, string sender, string receiver, time_t time){
+        amount = amt;
+        senderKey = sender;
+        receiverKey = receiver;
+        timestamp = time;
+    }
 };
 
 //block class
@@ -29,6 +38,9 @@ class Block{
 
         // TransactionData data
         TransactionData data;
+
+        // getting index
+        int getIndex();
 
         // validate Hash
         bool validateHash();
@@ -61,6 +73,10 @@ size_t Block :: getPreviousHash(){
     return previousHash;
 }
 
+int Block :: getIndex(){
+    return index;
+}
+
 bool Block :: validateHash(){
     return genrateHash() == blockHash;
 }
@@ -69,11 +85,11 @@ bool Block :: validateHash(){
 class Blockchain{
     private:
         Block createGensisBlock();
+        vector<Block> chain;
 
     public:
         //public chain
-        vector<Block> chain;
-
+        vector<Block> getChain();
         //Constructer
         Blockchain();
 
@@ -83,6 +99,8 @@ class Blockchain{
 
         //contrived Example for Demo only
         Block *getLetestBlock();
+
+        void printChain();
 };
 
 // Blockchain Consturcter
@@ -93,14 +111,9 @@ Blockchain :: Blockchain () {
 
 Block Blockchain :: createGensisBlock(){
     time_t current;
-    TransactionData d;
-    d.amount = 0;
-    d.receiverKey = "none";
-    d.senderKey = "none";
-    d.timestamp = time(&current);
+    TransactionData d(0,"None", "None", time(&current));
 
-    hash<int> hash1;
-    Block gensis(0, d, hash1(0));
+    Block gensis(0, d, 0);
     return gensis;
 }
 
@@ -110,8 +123,10 @@ Block *Blockchain :: getLetestBlock(){
 }
 
 void Blockchain :: addBlock(TransactionData d){
-    int index = (int)chain.size()-1;
-    Block newBlock(index, d, getLetestBlock()->getHash());
+    int index = (int)chain.size();
+    size_t previousHash = (int)chain.size() > 0 ? getLetestBlock()->getHash() : 0;
+    Block newBlock(index, d, previousHash);
+    chain.push_back(newBlock);
 }
 
 bool Blockchain :: isChainValid(){
@@ -135,6 +150,23 @@ bool Blockchain :: isChainValid(){
     return true;
 }
 
+void Blockchain :: printChain(){
+    vector<Block> :: iterator it;
+    
+    for(it = chain.begin() ; it != chain.end() ; ++it){
+        Block currentBlock = *it;
+        printf("\n\n Block =======================================");
+        printf("\nIndex : %d",currentBlock.getIndex());
+        printf("\nAmount: %f",currentBlock.data.amount);
+        printf("\nSenderKey: %s",currentBlock.data.senderKey.c_str());
+        printf("\nReceiverKey: %s",currentBlock.data.receiverKey.c_str());
+        printf("\nTimestamp: %ld",currentBlock.data.timestamp);
+        printf("\nHash: %zu",currentBlock.getHash());
+        printf("\nPrevious hash: %zu",currentBlock.getPreviousHash());
+        printf("\nIs Block Valid: %d",currentBlock.validateHash());
+    }
+}
+
 
 int main(void){
     // Start a Block-Chain
@@ -149,6 +181,16 @@ int main(void){
     data1.timestamp = time(&data1Time);
 
     Indicoin.addBlock(data1);
+
+    time_t data2Time;
+    TransactionData data2(2.5, "Rahul", "Arjun", time(&data2Time));
+    Indicoin.addBlock(data2);
+
+    time_t data3Time;
+    TransactionData data3(2.5, "Virat", "Arjun", time(&data2Time));
+    Indicoin.addBlock(data3);
+
+    Indicoin.printChain();
 
     cout << "Is chain is Valid" << endl
          << Indicoin.isChainValid() << endl;
