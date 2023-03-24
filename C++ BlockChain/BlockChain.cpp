@@ -194,7 +194,7 @@ int main(void){
     // Indicoin.printChain();
 
     while(1){
-        system("clear")
+        system("clear");
         cout<<"\tWELCOME IN BLOCK-CHAIN TECHNOLOGY\t"<<endl;
         cout<<"01. FOR INSERTING DATA"<<endl;
         cout<<"02. FOR PRINTING CHAIN"<<endl;
@@ -231,7 +231,7 @@ int main(void){
             break;
 
             default:
-                cout<<"Please enter a correct input :)"<<endl;
+                continue;
             break;
         }
 
