@@ -155,7 +155,7 @@ void Blockchain :: printChain(){
     
     for(it = chain.begin() ; it != chain.end() ; ++it){
         Block currentBlock = *it;
-        printf("\n\n Block =======================================");
+        printf("\n\t\t|\t|\n================= BLOCK ======================");
         printf("\nIndex : %d",currentBlock.getIndex());
         printf("\nAmount: %f",currentBlock.data.amount);
         printf("\nSenderKey: %s",currentBlock.data.senderKey.c_str());
@@ -164,6 +164,7 @@ void Blockchain :: printChain(){
         printf("\nHash: %zu",currentBlock.getHash());
         printf("\nPrevious hash: %zu",currentBlock.getPreviousHash());
         printf("\nIs Block Valid: %d",currentBlock.validateHash());
+        printf("\n\n================= CHAIN ======================\n\t\t|\t|\n");
     }
 }
 
@@ -173,22 +174,72 @@ int main(void){
     Blockchain Indicoin;
 
     // Data for first added block
-    TransactionData data1;
-    time_t data1Time;
-    data1.amount = 1.5;
-    data1.receiverKey = "Arjun";
-    data1.senderKey = "Rahul";
-    data1.timestamp = time(&data1Time);
+    // TransactionData data1;
+    // time_t data1Time;
+    // data1.amount = 1.5;
+    // data1.receiverKey = "Arjun";
+    // data1.senderKey = "Rahul";
+    // data1.timestamp = time(&data1Time);
 
-    Indicoin.addBlock(data1);
+    // Indicoin.addBlock(data1);
 
-    time_t data2Time;
-    TransactionData data2(2.5, "Rahul", "Arjun", time(&data2Time));
-    Indicoin.addBlock(data2);
+    // time_t data2Time;
+    // TransactionData data2(2.5, "Rahul", "Arjun", time(&data2Time));
+    // Indicoin.addBlock(data2);
 
-    time_t data3Time;
-    TransactionData data3(4.5, "Virat", "Arjun", time(&data2Time));
-    Indicoin.addBlock(data3);
+    // time_t data3Time;
+    // TransactionData data3(4.5, "Virat", "Arjun", time(&data2Time));
+    // Indicoin.addBlock(data3);
 
-    Indicoin.printChain();
+    // Indicoin.printChain();
+
+    while(1){
+        system("clear")
+        cout<<"\tWELCOME IN BLOCK-CHAIN TECHNOLOGY\t"<<endl;
+        cout<<"01. FOR INSERTING DATA"<<endl;
+        cout<<"02. FOR PRINTING CHAIN"<<endl;
+        int n;
+        cin >> n;
+        system("clear");
+        
+        switch(n){
+            case 1 :{
+                cout<<"======== Entring data in Block ========="<<endl;
+                string sender;
+                cout << "Enter Sender Name: ";
+                cin >> sender;
+
+                string receiver;
+                cout << "Enter Receiver Name: ";
+                cin >> receiver;
+
+                double amount;
+                cout << "Enter Amount: $ ";
+                cin >> amount;
+
+                time_t dateTime;
+                TransactionData data(amount, sender, receiver, time(&dateTime));
+                Indicoin.addBlock(data);
+            }
+            break;
+            
+
+            case 2 :{
+                cout<<"======== These are all block data of BLOCK - CHAIN ========"<<endl;
+                Indicoin.printChain();
+                    }
+            break;
+
+            default:
+                cout<<"Please enter a correct input :)"<<endl;
+            break;
+        }
+
+        cout<< endl << "Do you want to continue (Y/N)" << endl;
+        if(getchar() == 'N' || getchar() == 'n'){
+            system("clear");
+            break;
+        }
+    }
+    return 0;
 }
