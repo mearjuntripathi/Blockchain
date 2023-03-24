@@ -187,11 +187,8 @@ int main(void){
     Indicoin.addBlock(data2);
 
     time_t data3Time;
-    TransactionData data3(2.5, "Virat", "Arjun", time(&data2Time));
+    TransactionData data3(4.5, "Virat", "Arjun", time(&data2Time));
     Indicoin.addBlock(data3);
 
     Indicoin.printChain();
-
-    cout << "Is chain is Valid" << endl
-         << Indicoin.isChainValid() << endl;
 }
